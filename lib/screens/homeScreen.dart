@@ -1,9 +1,11 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/screens/login.dart';
 import 'package:flutter_application_1/utils/LoginList.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' show get;
+import 'package:shared_preferences/shared_preferences.dart';
 import '../models/RecomList.dart';
 import 'dart:convert';
 
@@ -27,7 +29,6 @@ class _HomeScreenState extends State<HomeScreen> {
     scrollController.addListener(() {
       if (scrollController.position.pixels ==
           scrollController.position.maxScrollExtent) {
-        print(')))))))))))))))))))))))))');
         fetchAgain();
       }
     });
@@ -60,7 +61,7 @@ class _HomeScreenState extends State<HomeScreen> {
         });
       }
     } else {
-      print('not status code of error free');
+      // print('not status code of error free');
     }
   }
 
@@ -72,32 +73,32 @@ class _HomeScreenState extends State<HomeScreen> {
       var response = json.decode(res.body);
       var dataArr = response['data']['tournaments'];
       cursor = response['data']['cursor'];
-      print('-----------------cursor---------$cursor');
-      print('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%${dataArr.length}');
+      // print('-----------------cursor---------$cursor');
+      // print('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%${dataArr.length}');
       for (int i = 0; i < dataArr.length; i++) {
         var item = dataArr[i];
-        print(
-            '---------${item['name']}-------${item['cover_url']}-------${item['game_name']}---------${item['tournament_id']}');
+        // print(
+        //     '---------${item['name']}-------${item['cover_url']}-------${item['game_name']}---------${item['tournament_id']}');
         var obj = RecomList(item['name'], item['cover_url'], item['game_name'],
             item['tournament_id']);
         setState(() {
           list.add(obj);
         });
-        print('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@${list[i]}');
+        // print('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@${list[i]}');
       }
-      print(';lllllllllllllllllllllllllllll${list.length}');
+      // print(';lllllllllllllllllllllllllllll${list.length}');
     } else {
-      print('not status code of error free');
+      // print('not status code of error free');
     }
   }
 
   Widget middleView() {
     return Container(
       width: MediaQuery.of(context).size.width,
-      height: 100,
+      height: 80,
       clipBehavior: Clip.hardEdge,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(40),
+        borderRadius: BorderRadius.circular(20),
         border: Border.all(color: Colors.black, width: 0),
         color: Colors.yellow,
       ),
@@ -108,25 +109,73 @@ class _HomeScreenState extends State<HomeScreen> {
           Expanded(
             flex: 1,
             child: Container(
+              decoration: BoxDecoration(
+                  gradient: LinearGradient(colors: [
+                Colors.orange.shade600,
+                Colors.orange.shade400
+              ])),
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text('${LoginList.userData[widget.id]['T_played']}'),
-                  const Text('Tournaments'),
-                  const Text('Played'),
+                  Text(
+                    '${LoginList.userData[widget.id]['T_played']}',
+                    style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                        fontFamily: 'Open Sans'),
+                  ),
+                  const Text(
+                    'Tournaments',
+                    style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.white,
+                        fontFamily: 'Open Sans'),
+                  ),
+                  const Text(
+                    'played',
+                    style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.white,
+                        fontFamily: 'Open Sans'),
+                  ),
                 ],
               ),
-              color: Colors.orange,
             ),
           ),
           Expanded(
             flex: 1,
             child: Container(
-              color: Colors.purple,
+              decoration: BoxDecoration(
+                  gradient: LinearGradient(colors: [
+                Colors.purple.shade600,
+                Colors.purple.shade400
+              ])),
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text('${LoginList.userData[widget.id]['T_won']}'),
-                  const Text('Tournaments'),
-                  const Text('Won'),
+                  Text(
+                    '${LoginList.userData[widget.id]['T_won']}',
+                    style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                        fontFamily: 'Open Sans'),
+                  ),
+                  const Text(
+                    'Tournaments',
+                    style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.white,
+                        fontFamily: 'Open Sans'),
+                  ),
+                  const Text(
+                    'won',
+                    style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.white,
+                        fontFamily: 'Open Sans'),
+                  ),
                 ],
               ),
             ),
@@ -134,14 +183,36 @@ class _HomeScreenState extends State<HomeScreen> {
           Expanded(
             flex: 1,
             child: Container(
+              decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                      colors: [Colors.red.shade600, Colors.red.shade400])),
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text('${LoginList.userData[widget.id]['T_percent']}%'),
-                  const Text('Winning'),
-                  const Text('Percentage'),
+                  Text(
+                    '${LoginList.userData[widget.id]['T_percent']}%',
+                    style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                        fontFamily: 'Open Sans'),
+                  ),
+                  const Text(
+                    'Winning',
+                    style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.white,
+                        fontFamily: 'Open Sans'),
+                  ),
+                  const Text(
+                    'percentage',
+                    style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.white,
+                        fontFamily: 'Open Sans'),
+                  ),
                 ],
               ),
-              color: Colors.red,
             ),
           ),
         ],
@@ -152,14 +223,16 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget topView() {
     return Center(
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        //  mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Container(
             height: 100,
             width: 100,
+            margin: EdgeInsets.only(right: 20),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(100),
-              border: Border.all(width: 2.0, color: Colors.cyan),
+              // border: Border.all(width: 0.0, color: Colors.cyan),
               image: DecorationImage(
                 fit: BoxFit.fill,
                 image: NetworkImage(
@@ -168,24 +241,53 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           Container(
+            height: 100,
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   '${LoginList.userData[widget.id]['name']}',
-                  style: TextStyle(
-                      fontSize: 30,
+                  style: const TextStyle(
+                      fontSize: 26,
                       fontFamily: 'Open Sans',
                       fontWeight: FontWeight.bold),
                 ),
                 Container(
+                  margin: EdgeInsets.only(bottom: 20),
+                ),
+                Container(
+                  padding: EdgeInsets.all(8),
                   decoration: BoxDecoration(
-                    border: Border.all(width: 2.0, color: Colors.cyan),
-                    borderRadius: const BorderRadius.all(Radius.circular(10)),
+                    border: Border.all(width: 2.0, color: Colors.deepPurple),
+                    borderRadius: const BorderRadius.all(Radius.circular(50)),
                   ),
                   child: Row(
                     children: [
-                      Text('${LoginList.userData[widget.id]['eloRating']}'),
-                      const Text('Elo Rating'),
+                      Text(
+                        '${LoginList.userData[widget.id]['eloRating']}',
+                        style: const TextStyle(
+                          fontSize: 24,
+                          fontFamily: 'Open Sans',
+                          fontWeight: FontWeight.bold,
+                          color: Colors.deepPurple,
+                        ),
+                      ),
+                      Container(
+                        margin: const EdgeInsets.only(right: 10),
+                      ),
+                      const Text(
+                        'Elo rating',
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontFamily: 'Open Sans',
+                          fontWeight: FontWeight.bold,
+                          color: Colors.grey,
+                        ),
+                      ),
+                      Container(
+                        margin: const EdgeInsets.only(right: 30),
+                      ),
                     ],
                   ),
                 )
@@ -197,115 +299,131 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  // Widget middleView() {
-  //   return Container(
-  //     width: MediaQuery.of(context).size.width,
-  //     clipBehavior: Clip.hardEdge,
-  //     decoration: BoxDecoration(
-  //         borderRadius: BorderRadius.circular(40),
-  //         border: Border.all(color: Colors.black, width: 0)),
-  //     child: Row(
-  //       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-  //       crossAxisAlignment: CrossAxisAlignment.stretch,
-  //       children: [
-  //         Container(
-  //           decoration: const BoxDecoration(
-  //             color: Colors.orange,
-  //           ),
-  //           child: Expanded(
-  //             flex: 1,
-  //             child: Container(
-  //               child: Column(
-  //                 children: [
-  //                   Text('${LoginList.userData[widget.id]['T_played']}'),
-  //                   const Text('Tournaments'),
-  //                   const Text('Played'),
-  //                 ],
-  //               ),
-  //             ),
-  //           ),
-  //         ),
-  //         Container(
-  //           decoration: const BoxDecoration(
-  //             color: Colors.purple,
-  //           ),
-  //           child: Expanded(
-  //             flex: 1,
-  //             child: Column(
-  //               children: [
-  //                 Text('${LoginList.userData[widget.id]['T_won']}'),
-  //                 const Text('Tournaments'),
-  //                 const Text('Won'),
-  //               ],
-  //             ),
-  //           ),
-  //         ),
-  //         Container(
-  //           decoration: const BoxDecoration(
-  //             color: Colors.red,
-  //           ),
-  //           child: Expanded(
-  //             flex: 1,
-  //             child: Column(
-  //               children: [
-  //                 Text('${LoginList.userData[widget.id]['T_percent']}%'),
-  //                 const Text('Winning'),
-  //                 const Text('Percentage'),
-  //               ],
-  //             ),
-  //           ),
-  //         ),
-  //       ],
-  //     ),
-  //   );
-  // }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('HomeScreen'),
-      ),
-      body: Container(
-        height: MediaQuery.of(context).size.height,
-        margin: EdgeInsets.all(20),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            topView(),
-            middleView(),
-            const Center(
-              child: Text('Recommended For You'),
-            ),
-            Container(
-              height: 300,
-              child: ListView.builder(
-                itemCount: list.length + 1,
-                scrollDirection: Axis.vertical,
-                shrinkWrap: true,
-                controller: scrollController,
-                itemBuilder: (context, index) {
-                  if (index == list.length) {
-                    return const CupertinoActivityIndicator();
-                  }
-                  return Container(
-                    child: Column(
-                      children: [
-                        Container(
-                          height: 100,
-                          width: 100,
-                          child: Image.network(list[index].cover_url),
-                        ),
-                        Text(list[index].game_name),
-                        Text(list[index].name),
-                      ],
-                    ),
-                  );
+        actions: <Widget>[
+          Padding(
+              padding: EdgeInsets.only(right: 20.0),
+              child: GestureDetector(
+                onTap: () async {
+                  SharedPreferences shr = await SharedPreferences.getInstance();
+                  shr.remove('id');
+                  Navigator.push(context, MaterialPageRoute(builder: (contex) {
+                    return Login();
+                  }));
                 },
+                child: Icon(
+                  Icons.logout,
+                  size: 26.0,
+                ),
+              )),
+        ],
+      ),
+      body: SafeArea(
+        child: Container(
+          // height: MediaQuery.of(context).size.height - 40,
+          margin: EdgeInsets.all(20),
+          child: Column(
+            // mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              topView(),
+              Container(
+                margin: EdgeInsets.only(bottom: 20),
               ),
-            )
-          ],
+              middleView(),
+              Container(
+                margin: EdgeInsets.only(bottom: 20),
+              ),
+              const Text(
+                'Recommended for you',
+                style: TextStyle(
+                    fontSize: 22,
+                    fontFamily: 'Open Sans',
+                    fontWeight: FontWeight.bold),
+              ),
+              Container(
+                margin: EdgeInsets.only(bottom: 20),
+              ),
+              Container(
+                  height: (MediaQuery.of(context).size.height) * 0.4,
+                  child: ListView.builder(
+                    itemCount: list.length + 1,
+                    scrollDirection: Axis.vertical,
+                    shrinkWrap: true,
+                    controller: scrollController,
+                    padding: EdgeInsets.only(bottom: 10),
+                    itemBuilder: (context, index) {
+                      if (index == list.length) {
+                        return const CupertinoActivityIndicator();
+                      }
+                      return Container(
+                        height: 150,
+                        clipBehavior: Clip.hardEdge,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          border: Border.all(color: Colors.black, width: 0),
+                          color: Colors.white,
+                        ),
+                        margin: EdgeInsets.only(bottom: 20),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Expanded(
+                              flex: 15,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  image: DecorationImage(
+                                    fit: BoxFit.fill,
+                                    image: NetworkImage(
+                                        '${list[index].cover_url}'),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              flex: 5,
+                              child: Container(
+                                margin: EdgeInsets.only(left: 10, top: 10),
+                                child: Text(
+                                  list[index].name,
+                                  style: const TextStyle(
+                                    fontSize: 16,
+                                    fontFamily: 'Open Sans',
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              flex: 5,
+                              child: Container(
+                                margin: EdgeInsets.only(left: 10),
+                                child: Text(
+                                  list[index].game_name,
+                                  style: const TextStyle(
+                                    fontSize: 14,
+                                    fontFamily: 'Open Sans',
+                                    color: Colors.grey,
+                                    fontWeight: FontWeight.w500,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  ))
+            ],
+          ),
         ),
       ),
     );

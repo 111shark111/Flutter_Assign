@@ -2,6 +2,7 @@ import 'package:flutter_application_1/screens/homeScreen.dart';
 import 'package:flutter_application_1/utils/LoginList.dart';
 
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -12,18 +13,26 @@ class Login extends StatefulWidget {
 
 class _LoginState extends State<Login> {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-  void loginHandler(BuildContext ctx) {
+
+  void loginHandler(BuildContext ctx) async {
     if (formKey.currentState!.validate()) {
       formKey.currentState!.save();
       for (int i = 0; i < LoginList.userData.length; i++) {
         if (name == LoginList.userData[i]['name'] &&
             password == LoginList.userData[i]['password']) {
+          try {
+            final SharedPreferences sharedpref =
+                await SharedPreferences.getInstance();
+            await sharedpref.setInt('id', i);
+          } catch (err) {
+            //  print(err);
+          }
           Navigator.push(ctx, MaterialPageRoute(builder: (ctx) {
             return HomeScreen(id: i);
           }));
           return;
         } else {
-          print('Not here in $i');
+          // print('Not here in $i');
         }
       }
     }

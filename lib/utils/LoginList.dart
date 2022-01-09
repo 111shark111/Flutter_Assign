@@ -1,8 +1,6 @@
 import 'dart:core';
 
 class LoginList {
-  static List<String> userList = ['user1', 'user2', 'user3'];
-  static List<String> passList = ['user1@123', 'user2@123', 'user3@123'];
   static List<Map<String, String>> userData = [
     {
       'name': 'user1',
@@ -11,7 +9,7 @@ class LoginList {
       'profilePic':
           'https://media.istockphoto.com/photos/middle-aged-man-portrait-picture-id1285156699',
       'T_played': '34',
-      'T_won': '9',
+      'T_won': '09',
       'T_percent': '26'
     },
     {
