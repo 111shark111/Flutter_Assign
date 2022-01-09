@@ -1,16 +1,10 @@
 # flutter_application_1
-
-A new Flutter project.
+Flutter Assignment 
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+In order to login in this app , I have hardcoded 3 users with some hardcoded values of them like eloRating , profilePic ,name ,password etc .
+here below is list of username and password respectively.
+1) username: user1            password: passUser1
+2) username: user2            password: passUser2
+3) username: user3            password: passUser3
